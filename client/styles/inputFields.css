@@ -1,0 +1,145 @@
+:root{
+    --black: #000;
+    --blackLighter: #231c3f;
+    --border: rgba(35, 28, 63, 0.4);
+    --bottomBorderInputFields: #ccc;
+    --grey: #484459;
+    --greyLighter: #777484;
+    --primaryColor: #fffcf4;
+    --primaryDarker: #f1f1f1;
+    --secondaryColor: #7F63F4;
+    --secondaryColorDarker: #6a48f1;
+    --atentionColor: #f14848;
+    --pureRed: #ff0000;
+    --hover: rgba(127, 99, 244, 0.15);
+    --selected: rgba(127, 99, 244, 0.3);
+    --headingFontSize: 1.5rem;
+}
+
+/* INPUT FIELDS */
+
+.input-field {
+    position: relative;
+    border-bottom: 2px solid var(--bottomBorderInputFields);
+    margin: 7px 1rem 7px 0;
+}
+
+.input-field.username{
+    margin: 7px 1rem 0.75rem 0;
+}
+
+.input-field label {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    color: var(--black);
+    font-size: 16px;
+    pointer-events: none;
+    transition: 0.2s ease;
+}
+
+.input-field input,
+.input-field select {
+    width: 100%;
+    height: 40px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: var(--secondaryColor);
+}
+
+.input-field input::-webkit-outer-spin-button,
+.input-field input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.input-field select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 10px;
+}
+
+.input-field select:focus~label,
+.input-field input:focus~label,
+.input-field input:valid~label,
+.input-field select:valid~label {
+    font-size: 0.8rem;
+    top: 10px;
+    transform: translateY(-120%);
+    color: var(--secondaryColor);
+}
+
+.input-field input:user-invalid ~ label,
+.input-field select:user-invalid ~ label {
+    font-size: 0.8rem;
+    top: 10px;
+    transform: translateY(-120%);
+    color: var(--pureRed);
+}
+
+input[type="submit"], input[type="button"]{
+    background: var(--primaryColor);
+    color: #000;
+    font-weight: 600;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 16px;
+    border: 2px solid transparent;
+    transition: 0.3s ease;
+}
+
+/* END OF STANDARD STYLES */
+
+.age, .school{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.age .age-optionGroup, .school .school-optionGroup{
+    margin: 0 0 0 1rem;
+}
+
+.ageLabel{
+    position: relative;
+    margin: 0 3rem 0 0;
+}
+
+.ageLabel::after{
+    content: 'Am 19.12.2025';
+    position: absolute;
+    bottom: -75%;
+    left: 0px;
+    width: 400%;
+    font-size: 12px;
+    color: var(--greyLighter)
+}
+
+@media (max-width: 768px) {
+  .input-field input,
+  .input-field label, 
+  .ageLabel,
+  .schoolLabel{
+    font-size: 14px;
+  }
+
+  .ageLabel, .schoolLabel{
+    grid-area: 1 / 1 / 2 / 2;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 35%;
+  }
+
+  .ageLabel::after {
+    font-size: 10px;
+    width: 200%;
+    bottom: -75%;
+  }
+}

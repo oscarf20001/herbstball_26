@@ -1,0 +1,8 @@
+# Erlaube URL-Umschreibungen
+RewriteEngine On
+
+# Stelle sicher, dass index.php bevorzugt wird
+DirectoryIndex index.php index.html
+
+# Optional: Weiterleitung bei Zugriff auf die Root-URL
+RewriteRule ^$ index.php [L]

@@ -1,0 +1,103 @@
+:root{
+    --black: #000;
+    --blackLighter: #231c3f;
+    --border: rgba(35, 28, 63, 0.4);
+    --grey: #484459;
+    --greyLighter: #777484;
+    --primaryColor: #fffcf4;
+    --primaryDarker: #f1f1f1;
+    --primaryVeryDark: #e3e3e3;
+    --secondaryColor: #7F63F4;
+    --secondaryColorDarker: #6a48f1;
+    --atentionColor: #f14848;
+    --pureRed: #ff0000;
+    --hover: rgba(127, 99, 244, 0.15);
+    --selected: rgba(127, 99, 244, 0.3);
+    --headingFontSize: 1.5rem;
+}
+
+#displayAllTicketsContainer{
+    display: none;
+}
+
+.table_component {
+    margin: 2rem 0 0 0;
+    padding: 0.5rem;
+
+    overflow: auto;
+    width: 100%;
+    background-color: var(--primaryColor);
+
+    border-radius: 0.4rem;
+    position: relative;
+}
+
+.table_component table {
+    height: 100%;
+    width: 100%;
+    table-layout: auto;
+    border-collapse:collapse;
+    text-align: left;
+    margin: 2rem 0 0 0;
+}
+
+.table_component caption {
+    caption-side: top;
+    text-align: left;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: var(--secondaryColor);
+    padding: 0.5rem;
+    color: var(--primaryColor);
+    border-bottom-right-radius: 0.4rem;
+}
+
+.table_component th {
+    color: #000000;
+    padding: 5px;
+}
+
+.table_component td {
+    color: #000000;
+    padding: 5px;
+}
+
+#setFinancing{
+    margin: 1rem 0 0 0;
+}
+
+#financing{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+
+#financing #money-form-left{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+input[type='number'] {
+    -moz-appearance:textfield;
+    appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+#financing #money-form-left select{
+    background-color: var(--primaryColor);
+    border:none;
+    border-radius: 0.4rem;
+    padding: 1rem;
+    margin: 0 0 0 1rem;
+}
+
+#financing #money-form-right{
+    transform: translateX(1rem);
+}

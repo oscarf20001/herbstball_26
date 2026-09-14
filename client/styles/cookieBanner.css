@@ -1,0 +1,107 @@
+:root {
+    --black: #000;
+    --blackLighter: #231c3f;
+    --border: rgba(35, 28, 63, 0.4);
+    --grey: #484459;
+    --greyLighter: #777484;
+    --primaryColor: #fffcf4;
+    --primaryDarker: #f1f1f1;
+    --primaryVeryDark: #e3e3e3;
+    --secondaryColor: #7F63F4;
+    --secondaryColorDarker: #6a48f1;
+    --atentionColor: #f14848;
+    --pureRed: #ff0000;
+    --signalRed: #ff1a1a;
+    --signalShineRed: rgba(20, 14, 14, 0.6);
+    --signalGreen: #00cc44;
+    --signalShineGreen: rgba(0, 255, 0, 0.5);
+    --hover: rgba(127, 99, 244, 0.15);
+    --selected: rgba(127, 99, 244, 0.3);
+    --headingFontSize: 1.5rem;
+    --borderRadius: 0.4rem;
+}
+
+#cookies{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 9999;
+
+    aspect-ratio: 21/9;
+    height: 200px;
+    margin: 2rem;
+    padding: 1rem;
+    
+    border: 2px solid var(--border);
+    border-radius: var(--borderRadius);
+
+    background-color: var(--primaryColor);
+
+    -webkit-box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.42); 
+    box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.42);
+}
+
+#cookie-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    height: fit-content;
+    margin: 0 0 1rem 0;
+}
+
+#cookie-header h2{
+    margin:0;
+}
+
+#cookie-header img{
+    width: auto;
+    height: 32px !important;
+}
+
+#cookie-description{
+    color: var(--greyLighter);
+}
+
+#cookie-buttons{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 2rem 0 0 0;
+}
+
+#cookie-buttons input{
+    width: 100%;
+    text-align: center;
+    border: 1px solid var(--secondaryColor);
+}
+
+#cookie-buttons input:hover{
+    background-color: var(--secondaryColor);
+    color:var(--primaryColor);
+}
+
+#cookie-buttons input:first-child{
+    background-color: var(--secondaryColor);
+    color: var(--primaryColor);
+}
+
+@media screen and (max-width: 768px) {
+    #cookies{
+        width: calc(100% - 2rem);
+        position: absolute;
+        margin: 0;
+        aspect-ratio: 0;
+        height: fit-content;
+    }
+
+    #cookies h2{
+        font-size: 19px;
+    }
+
+    #cookies div{
+        font-size: 14px;
+    }
+}

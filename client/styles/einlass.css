@@ -1,0 +1,210 @@
+:root {
+    --black: #000;
+    --blackLighter: #231c3f;
+    --border: rgba(35, 28, 63, 0.4);
+    --grey: #484459;
+    --greyLighter: #777484;
+    --primaryColor: #fffcf4;
+    --primaryDarker: #f1f1f1;
+    --primaryVeryDark: #e3e3e3;
+    --secondaryColor: #7F63F4;
+    --secondaryColorDarker: #6a48f1;
+    --atentionColor: #f14848;
+    --pureRed: #ff0000;
+    --signalRed: #ff1a1a;
+    --signalShineRed: rgba(20, 14, 14, 0.6);
+    --signalGreen: #00cc44;
+    --signalShineGreen: rgba(0, 255, 0, 0.5);
+    --warningOrange: #ffcd1a;
+    --hover: rgba(127, 99, 244, 0.15);
+    --selected: rgba(127, 99, 244, 0.3);
+    --headingFontSize: 1.5rem;
+    --borderRadius: 0.4rem;
+}
+
+#entrancePanelContainer{
+    border-radius: var(--borderRadius);
+    background-color: var(--primaryColor);
+
+    padding: 1rem;
+    height: calc(100% - 2rem - 10px);
+    border: 5px solid var(--primaryColor);
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 10% 65% 25%;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px; 
+
+    position: relative;
+}
+
+#eingabeContainer{
+    grid-area: 1 / 1 / 2 / 3; 
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 0 0.5rem 0;
+}
+
+#barCodeSubmitButton{
+    margin: 0.25rem 0 0.25rem 1rem;
+    padding: 0.5rem;
+    height: 100%;
+}
+
+.input-field{
+    margin: 0;
+    width: 25%;
+    height: 100%;
+}
+
+.input-field input{
+    height: 40px;
+}
+
+#displayResultContainer{
+    grid-area: 2 / 1 / 3 / 3;   
+}
+
+#settingsContainer{
+    grid-area: 3 / 1 / 4 / 2;
+}
+
+#confirmEntranceContainer{
+    grid-area: 3 / 2 / 4 / 3;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+#entrancePanelContainer.warning{
+    border: 5px solid var(--warningOrange);
+}
+
+#entrancePanelContainer.error{
+    border: 5px solid var(--signalRed);
+}
+
+#entrancePanelContainer input[type="button"]{
+    border: 1px solid var(--secondaryColor);
+    transition: .2s ease-out;
+}
+
+#entrancePanelContainer input[type="button"]:hover{
+    background-color: var(--secondaryColor);
+    color: var(--primaryColor);
+}
+
+#displayResultContainer{
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    font-family: system-ui, sans-serif;
+    color: #222;
+}
+
+.dataSection {
+  background: #fff7e6;
+  border-radius: var(--borderRadius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 0rem 1rem 1rem 1rem;
+  transition: transform 0.2s ease;
+}
+
+.dataSection:hover {
+  transform: translateY(-2px);
+}
+
+.dataSection h2 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid var(--secondaryColor);
+  padding-bottom: 0.3rem;
+}
+
+.dataTable {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  background-color: #fff2d8;
+}
+
+.label {
+  font-weight: 600;
+  color: #444;
+  font-size: 0.95rem; /* etwas kleiner */
+}
+
+.value {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.value:empty::before {
+  content: "—";
+  color: #aaa;
+}
+
+#idData{
+    width: 20%;
+}
+
+#personData{
+    width: 35%;
+}
+
+#paymentData{
+    width: 45%;
+}
+
+.entranceInformationPiece_description{
+    font-weight: normal;
+}
+
+.entranceInformationPieceHeading{
+    font-weight: bold;
+}
+
+#checkContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+#messageContainer{
+    background-color: var(--warningOrange);
+    padding: 1rem;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#messageContainer > *{
+    color: var(--primaryColor);
+    font-weight: 900;
+}
+
+#messageContainer p{
+    margin: 0;
+    padding: 0;
+}
+
+#settingsContainer h1{
+    margin-bottom: 0;
+}

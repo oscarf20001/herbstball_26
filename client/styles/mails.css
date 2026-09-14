@@ -1,0 +1,81 @@
+:root {
+    --black: #000;
+    --blackLighter: #231c3f;
+    --border: rgba(35, 28, 63, 0.4);
+    --grey: #484459;
+    --greyLighter: #777484;
+    --primaryColor: #fffcf4;
+    --primaryDarker: #f1f1f1;
+    --primaryVeryDark: #e3e3e3;
+    --secondaryColor: #7F63F4;
+    --secondaryColorDarker: #6a48f1;
+    --atentionColor: #f14848;
+    --pureRed: #ff0000;
+    --signalRed: #ff1a1a;
+    --signalShineRed: rgba(20, 14, 14, 0.6);
+    --signalGreen: #00cc44;
+    --signalShineGreen: rgba(0, 255, 0, 0.5);
+    --hover: rgba(127, 99, 244, 0.15);
+    --selected: rgba(127, 99, 244, 0.3);
+    --headingFontSize: 1.5rem;
+    --borderRadius: 0.4rem;
+}
+
+#mail{
+    display: flex;
+    flex-direction: row;
+}
+
+#mail .input-field.name{
+    width: 85%;
+}
+
+#feedback{
+    height: 100%;
+    width: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.feedbackContainer{
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.feedback-light-bulb{
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background-color: aqua;
+    margin: 0 1rem 0 0;
+}
+
+.bulb-recognized,.bulb-new{
+    background-color: var(--primaryVeryDark);
+    transition: .2s ease;
+}
+
+.bulb-new.active{
+    background-color: var(--signalRed); /* kräftiges Rot */
+    box-shadow: 0 0 6px 2px var(--signalShineRed);
+}
+
+.bulb-recognized.active{
+    background-color: var(--signalGreen); /* sattes Grün */
+    box-shadow: 0 0 6px 2px var(--signalShineGreen);
+}
+
+#downerTickets{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+}
+
+.fa-paper-plane{
+    margin: 0 0.5rem 0 0;
+}

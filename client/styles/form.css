@@ -1,0 +1,271 @@
+:root{
+    --black: #000;
+    --blackLighter: #231c3f;
+    --border: rgba(35, 28, 63, 0.4);
+    --grey: #484459;
+    --greyLighter: #777484;
+    --primaryColor: #fffcf4;
+    --primaryDarker: #f1f1f1;
+    --secondaryColor: #7F63F4;
+    --secondaryColorDarker: #6a48f1;
+    --atentionColor: #f14848;
+    --pureRed: #ff0000;
+    --hover: rgba(127, 99, 244, 0.15);
+    --selected: rgba(127, 99, 244, 0.3);
+    --headingFontSize: 1.5rem;
+}
+
+/* UPPER-DESIGN: COUNT OF TICKETS */
+
+#mainContainer{
+    grid-area: 2 / 2 / 3 / 4;
+    position: relative;
+    padding: 2rem;
+}
+
+#mainContainer #headerTickets{
+    margin: 0 0 1rem 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+}
+
+#cntTickets-optionGroup{
+    margin: 0 0 0 1rem;
+}
+
+.selectiveButton{
+    background-color: var(--primaryColor);
+    border: none;
+    height: 2rem;
+    min-width: 2rem;
+    border-radius: 0.4rem;
+    margin: 0 0.5rem 0 0;
+    cursor: pointer;
+    transition: .1s ease-out;
+    text-align: center;
+}
+
+.selectiveButton:hover{
+    background-color: var(--hover);
+}
+
+.selectiveButton.active{
+    background-color: var(--secondaryColor);
+    color: var(--primaryColor);
+}
+
+.buttonNeedsBorder{
+    border: 1px solid var(--border);
+}
+
+/* ACTUAL DESIGN OF TICKET DIV */
+
+.ticket{
+    width: 100%;
+    background-color: var(--primaryColor);
+    border-radius: 0.4rem;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    padding: 1rem 0.5rem;
+    margin: 1rem 0;
+}
+
+.ticket:nth-child(1){
+    overflow: hidden;
+    padding: 3rem 0.5rem 1rem 0.5rem;
+}
+
+.ticket:nth-child(1)::before{
+    content: 'Käufer';
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 5rem;
+    width: 10rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    color: var(--primaryColor);
+    transform: translate(-42%, -60%) rotate(-30deg);
+    background-color: var(--secondaryColor);
+}
+
+.name{
+    grid-area: 1 / 7 / 2 / 13;
+}
+
+.vorname{
+    grid-area: 1 / 1 / 2 / 7;
+}
+
+.email{
+    grid-area: 2 / 1 / 3 / 5;
+}
+
+.age{
+    grid-area: 2 / 5 / 3 / 9;
+}
+
+.school{
+    grid-area: 2 / 9 / 3 / 13;
+}
+
+#downerTickets{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#takeReservationButton, #addTicketButton{
+    background-color: var(--primaryColor);
+    border: none;
+    height: 3rem;
+    min-width: 4rem;
+    border-radius: 0.4rem;
+    padding: 0 1rem;
+    margin: 0 0rem 0 0;
+    cursor: pointer;
+    transition: .1s ease-out;
+    text-align: center;
+    font-weight: bold;
+    color: var(--blackLighter);
+}
+
+#subtractTicketButton{
+    background-color: var(--primaryColor);
+    border: none;
+    height: 3rem;
+    min-width: 4rem;
+    border-radius: 0.4rem;
+    padding: 0 1rem;
+    margin: 0 0rem 0 0;
+    cursor: pointer;
+    transition: .1s ease-out;
+    text-align: center;
+    font-weight: bold;
+    color: var(--blackLighter);
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#takeReservationButton:hover, #addTicketButton:hover{
+    background-color: var(--hover);
+    color: var(--secondaryColor);
+}
+
+#addTicketButton:hover i{
+    color: var(--secondaryColor);
+}
+
+#shoppingCart{
+    background-color: var(--primaryColor);
+    border: none;
+    height: 3rem;
+    min-width: 4rem;
+    border-radius: 0.4rem;
+    padding: 0 1rem;
+    margin: 0;
+    transition: .1s ease-out;
+    text-align: center;
+    font-weight: bold;
+    color: var(--blackLighter);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    #mainContainer #headerTickets{
+        margin: 0 0 1rem 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        width: calc(100vw - 4rem);
+    }
+
+    #ticketsContainer{
+        width: calc(100vw - 5rem);
+    }
+
+  .ticket {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 0 auto;
+  }
+
+  .input-field {
+    margin: 0.5rem 0;
+  }
+
+  .age,
+  .school {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+.age{
+      margin: 0.5rem 0 1rem 0;
+  }
+
+  .age .age-optionGroup,
+  .school .school-optionGroup {
+    margin: 0.5rem 0 0 0;
+    grid-area: 1 / 2 / 2 / 4;
+    width: 65%;
+  }
+
+  #cntTickets-optionGroup {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.5rem 0 0 0;
+  }
+
+  #downerTickets{
+    width: calc(100vw - 4rem);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 1rem;
+    grid-row-gap: 0px;
+  }
+
+  #addTicketButton {
+    position: static;
+    margin: 0.5rem 0 1rem 0;
+    width: 100%;
+    grid-area: 1 / 1 / 2 / 2;
+  }
+
+  #takeReservationButton {
+    width: 100%;
+    margin-bottom: 1rem;
+     grid-area: 2 / 1 / 3 / 3;
+  }
+
+  #shoppingCart{
+    width: auto;
+    font-size: 14px;
+    grid-area: 1 / 2 / 2 / 3;
+    margin: 0.5rem 0 1rem 0;
+  }
+}

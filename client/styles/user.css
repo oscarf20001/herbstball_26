@@ -1,0 +1,122 @@
+:root {
+    --black: #000;
+    --blackLighter: #231c3f;
+    --border: rgba(35, 28, 63, 0.4);
+    --grey: #484459;
+    --greyLighter: #777484;
+    --primaryColor: #fffcf4;
+    --primaryDarker: #f1f1f1;
+    --primaryVeryDark: #e3e3e3;
+    --secondaryColor: #7F63F4;
+    --secondaryColorDarker: #6a48f1;
+    --atentionColor: #f14848;
+    --pureRed: #ff0000;
+    --signalRed: #ff1a1a;
+    --signalShineRed: rgba(20, 14, 14, 0.6);
+    --signalGreen: #00cc44;
+    --signalShineGreen: rgba(0, 255, 0, 0.5);
+    --hover: rgba(127, 99, 244, 0.15);
+    --selected: rgba(127, 99, 244, 0.3);
+    --headingFontSize: 1.5rem;
+    --borderRadius: 0.4rem;
+}
+
+#container{
+    background-color: var(--primaryColor);
+    border-radius: var(--borderRadius);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#toggle{
+    height: auto;
+    width: auto;
+    background-color: var(--primaryVeryDark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    border-radius: var(--borderRadius);
+    border: 1px solid var(--secondaryColor);
+    margin: 1rem;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+}
+
+.option {
+  flex: 1;
+  text-align: center;
+  z-index: 1;
+  user-select: none;
+  border-radius: var(--borderRadius);
+  padding: 1rem;
+  max-height: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 8rem;
+  transition: .2s ease-in-out;
+}
+
+.highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background-color: var(--secondaryColor);
+  border-radius: var(--borderRadius);
+  transition: left 0.3s ease;
+}
+
+#toggle div.active{
+    color: var(--primaryColor);
+}
+
+#content_wrapper{
+    height: 90%;
+    width: calc(100% - 2rem);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    padding: 1rem;
+}
+
+.wrapper{
+    width: 100%;
+    height: 100%;
+}
+
+#reset_formular{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#reset_formular .input-field{
+    width: 100%;
+}
+
+input[type="submit"]{
+    border: 1px solid var(--secondaryColor);
+    color: var(--secondaryColor);
+    transition: .2s ease-out;
+}
+
+input[type="submit"]:hover{
+    background-color: var(--secondaryColor);
+    color: var(--primaryColor);
+}
+
+#create_formular .input-field{
+    margin: 0 0 1rem 0;
+}

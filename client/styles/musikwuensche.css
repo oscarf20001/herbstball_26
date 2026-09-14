@@ -1,0 +1,74 @@
+:root {
+    --black: #000;
+    --blackLighter: #231c3f;
+    --border: rgba(35, 28, 63, 0.4);
+    --grey: #484459;
+    --greyLighter: #777484;
+    --primaryColor: #fffcf4;
+    --primaryDarker: #f1f1f1;
+    --primaryVeryDark: #e3e3e3;
+    --secondaryColor: #7F63F4;
+    --secondaryColorDarker: #6a48f1;
+    --atentionColor: #f14848;
+    --pureRed: #ff0000;
+    --signalRed: #ff1a1a;
+    --signalShineRed: rgba(20, 14, 14, 0.6);
+    --signalGreen: #00cc44;
+    --signalShineGreen: rgba(0, 255, 0, 0.5);
+    --hover: rgba(127, 99, 244, 0.15);
+    --selected: rgba(127, 99, 244, 0.3);
+    --headingFontSize: 1.5rem;
+    --borderRadius: 0.4rem;
+}
+
+ol{
+    padding: 0;
+    counter-reset: wish;
+}
+
+li {
+  display: flex;
+  counter-increment: wish;
+  position: relative;
+  overflow: hidden;
+}
+
+li::before {
+  content: counter(wish) ". ";
+  margin-right: 0.5rem;
+  color: var(--blackLighter);
+}
+
+li.wish {
+    width: calc(100% - 1rem);
+    background-color: var(--primaryColor);
+    border-radius: var(--borderRadius);
+    list-style-position: inside; /* sorgt dafür, dass die Zahl mit im Hintergrund ist */
+    margin: 0 0 1rem 0;
+    padding: 1rem;
+}
+
+li .left{
+    width: 85%;
+}
+
+li .right{
+    height: 100%;
+    width: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-left: 1px dashed black;
+    transition: .2s ease-out;
+}
+
+li .right:hover{
+    background-color: var(--hover);
+}
+
+li .right i{
+    font-size: 36px;
+}
