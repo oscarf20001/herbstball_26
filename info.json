@@ -1,0 +1,42 @@
+{
+    "generell": {
+        "projectName": "herbstball_26",
+
+        "year": 2026, 
+        "eventCategory": "Ball",
+        "eventName": "Herbstball",
+
+        "dateAndTime": {
+            "date": "16.10.2026",
+            "dateUnix": 37148712034,
+            "timeStart": "20:00",
+            "timeStartHTML": "20:00 Uhr", 
+            "timeStartUnix": 324892031745189,
+            "timeEntrance": "18:45",
+            "timeEntranceHTML": "18:45 Uhr"
+        },
+
+        "location": {
+            "street": "Friedrich-Wolf-Straße",
+            "houseNumber": 31,
+            "postalCode": 16540,
+            "village": "Oranienburg",
+            "country": "Germany",
+            "province": "Brandenburg"
+        }
+
+    }, 
+    "html": {
+        "documentTitle": "Herbstball des MCG 2026 - Powered by Metis",
+        "headerText": "HERBSTBALL 2026 - Marie Curie Gymnasium"
+    },
+    "styles": {
+        "primary": "#fff",
+        "secondary": "fff",
+        "hover": "#fff",
+        "selected": "#fff"
+    },
+    "mail": {
+        "ticketRegistryHeading": "Fancytastische Buchungsbestätigung: Herbstball 2026"
+    }
+}

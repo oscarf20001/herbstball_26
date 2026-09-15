@@ -11,8 +11,8 @@
     --secondaryColorDarker: #6a48f1;
     --atentionColor: #f14848;
     --pureRed: #ff0000;
-    --hover: rgba(127, 99, 244, 0.15);
-    --selected: rgba(127, 99, 244, 0.3);
+    --hover: rgba(233, 131, 22, 0.15);
+    --selected: rgba(233, 131, 22, 0.3);
     --headingFontSize: 1.5rem;
     --successGreen: #00cb11;
 }

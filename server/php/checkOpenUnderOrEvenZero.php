@@ -6,7 +6,6 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 date_default_timezone_set('Europe/Berlin');
 
-require 'db_connection.php';
 require __DIR__ . '/../../vendor/autoload.php'; // Autoloader einbinden
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -50,7 +49,7 @@ function checkIfOpenIsZero($conn, $id, $logHandle) {
     $stmt = $conn->prepare("SELECT person.vorname, person.email, kaeufer.charges, kaeufer.paid_charges, kaeufer.open_charges
                             FROM kaeufer
                             JOIN person ON kaeufer.person_id = person.id
-                            WHERE person_id = ?");
+                            WHERE kaeufer.person_id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $stmt->bind_result($vorname, $email, $charges, $paid, $open);
@@ -277,6 +276,7 @@ function writeToLog($handleOrPath, string $message): void {
 
 function setDateInDatabase($conn, $id){
     #Sets the date of the ticket Mail for one person in the database
+    $timestamp = date('Y-m-d H:i:s');
 
     $response = [
         'status' => 'Wir führten die Funktion aus...'
@@ -299,6 +299,5 @@ function setDateInDatabase($conn, $id){
     
     // Statement schließen
     $stmt->close();
-    $conn->close();
     echo json_encode($response);
 }

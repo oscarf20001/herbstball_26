@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param('dssi', $geld, $method, $timestamp, $id);
 
     $response = [
-        'status' => 'fail',
+        'status' => 'fail'
     ];
 
     if($stmt->execute()){
@@ -63,18 +63,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'status' => 'success'
             ];
         }else{
-            echo json_encode($reponse);
+            echo json_encode($response);
         }
     }
     $stmt->close();
 
-    include 'checkOpenUnderOrEvenZero.php';
+    require_once __DIR__ . '/checkOpenUnderOrEvenZero.php';
     $logHandle = fopen(__DIR__ . '/kosten_beglichen.log', 'a'); // oder anderer Pfad
-    checkIfOpenIsZero($conn, $id, $logHandle);
-
     // Prüfen, ob die offene Summe gleich oder unter null ist
-    $conn->close();
+    checkIfOpenIsZero($conn, $id, $logHandle);
     echo json_encode($response);
+    $conn->close();
 }
 
 function logPayment($conn, $kaeufer_id, $oldMoney, $newMoney){

@@ -7,16 +7,16 @@
     --primaryColor: #fffcf4;
     --primaryDarker: #f1f1f1;
     --primaryVeryDark: #e3e3e3;
-    --secondaryColor: #7F63F4;
-    --secondaryColorDarker: #6a48f1;
+    --secondaryColor: #e98316;
+    --secondaryColorDarker: #e98316;
     --atentionColor: #f14848;
     --pureRed: #ff0000;
     --signalRed: #ff1a1a;
     --signalShineRed: rgba(20, 14, 14, 0.6);
     --signalGreen: #00cc44;
     --signalShineGreen: rgba(0, 255, 0, 0.5);
-    --hover: rgba(127, 99, 244, 0.15);
-    --selected: rgba(127, 99, 244, 0.3);
+    --hover: rgba(233, 131, 22, 0.15);
+    --selected: rgba(233, 131, 22, 0.3);
     --headingFontSize: 1.5rem;
     --borderRadius: 0.4rem;
 }

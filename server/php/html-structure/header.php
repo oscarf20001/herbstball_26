@@ -6,7 +6,7 @@ $outputURLEnding = getOutputURLEnding();
 ?>
 
 <div class="header-left">
-    <h1 id="headliner">WEIHNACHTSBALL 2025 <span id="post-Headline">- Marie Curie Gymnasium</span></h1>
+    <h1 id="headliner">HERBSTBALL 2026 <span id="post-Headline">- Marie Curie Gymnasium</span></h1>
     <?php
         if ($outputURLEnding == 'index' || $outputURLEnding == '') {
             echo '<p>🎟 Tickets vorbestellen</p>';
