@@ -228,20 +228,14 @@ try {
     <div class='container'>
         <h1>Hey " . $empfaengerPerson->vorname . ",</h1>
         <p>
-            Du hast es geschafft und dir deine grandiosen Tickets für den Weihnachtsball 2025 gesichert – vielen Dank dafür! 🎉
+            Du hast es geschafft und dir deine grandiosen Tickets für den Herbstball 2026 gesichert – vielen Dank dafür! 🎉
         </p>
         <p>
             <strong>Hier sind alle wichtigen Infos:</strong><br><br>
-            📅 Datum: 19.12.2025<br>
+            📅 Datum: 16.10.2026<br>
             🕓 Uhrzeit: Einlass ab 18:45 Uhr, Beginn um 20:00 Uhr, Ende: 01:00 Uhr<br>
             📍 Adresse: Friedrich-Wolf-Straße 31, Oranienburg
         </p>
-        <p>
-            Für eine Barzahlung der Tickets stehen euch die Termine am Dienstag und Donnerstag, in der großen Pause (11:10 Uhr - 11:40 Uhr), vor der Bibliothek des Marie-Curie Gymnasiums zur Verfügung.
-        </p>
-        <!--<p style='color:#c0392b;'>
-            <strong>Wichtig:</strong> Unbezahlte Tickets werden am <strong>12.12.2025 um 23:59 Uhr</strong> automatisch storniert!
-        </p>-->
 
         <h2>🧾 Deine Reservierung:</h2>
         <table>
@@ -280,22 +274,26 @@ $nachricht .= "
         </p>-->
 
         <div class='qr-section'>
-            <p><strong>Wenn du schon bezahlen möchtest:</strong><br>
-            Scanne den folgenden PayPal-QR-Code und überweise die oben genannte Gesamtsumme mit dem folgenden Verwendungszweck:<br><br>
-            <strong style='font-size: 12px;'>'" . str_replace("@", "at", $empfaengerPerson->email) . " Weihnachtsball'</strong>
+            <h2>💶 Bezahlung:</h2>
+            <p>Für eine Barzahlung der Tickets stehen euch die Termine am Dienstag und Donnerstag, in der großen Pause (11:10 Uhr - 11:40 Uhr), vor der Bibliothek des Marie-Curie Gymnasiums zur Verfügung.</p><br><br>
+            <p>Wenn du schon jetzt online bezahlen möchtest, scanne den folgenden PayPal-QR-Code und überweise die oben genannte Gesamtsumme mit dem folgenden Verwendungszweck:</p><br><br>
+            <strong style='font-size: 12px;'>'" . str_replace("@", "at", $empfaengerPerson->email) . " Herbstball'</strong>
             </p><br>
-            <img src='cid:paypal_qr' alt='QR zur Bezahlung' style='max-width: 100%; height: auto; border-radius: 6px;'>
+            <img src='cid:paypal_qr' alt='QR zur Bezahlung' style='max-width: 100%; height: auto; border-radius: 6px;'><br>
+            <p>Alternativ können die Tickets am Abend der Veranstaltung auch in bar bezahlt werden.</p>
         </div>
 
         <p>
-            Wir freuen uns riesig auf einen crazytastischen Abend mit euch! 💕<br><br>
+            Wir freuen uns riesig auf einen fancytastischen Abend mit tollen Erinnerungen und guter Stimmung! 💕<br><br>
             Beste Grüße,<br>
-            Gordon
+            Emma Plöntzke und Tilman Gunia
         </p>
 
         <div class='footer'>
-            *Alle Angaben ohne Gewähr; Änderungen vorbehalten; <a href='https://www.curiegymnasium.de/client/bedingungen.php'>Teilnahmebedingungen</a><br><br>
-            Weitere Informationen: Impressum & Datenschutz: <a href='https://curiegymnasium.de/client/imprint.php'>https://curiegymnasium.de/client/imprint.php</a>
+            *Alle Angaben ohne Gewähr; Änderungen vorbehalten; <a href='https://www.curiegymnasium.de/client/bedingungen.php'>Teilnahmebedingungen</a><br>
+            Weitere Informationen: Impressum & Datenschutz: <a href='https://curiegymnasium.de/client/imprint.php'>https://curiegymnasium.de/client/imprint.php</a><br><br>
+            MADE WITH ❤️ IN HOHEN NEUENDORF <br>
+            © Oscar Streich 2026
         </div>
     </div>
 </body>
