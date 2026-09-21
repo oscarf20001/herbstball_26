@@ -83,13 +83,15 @@ function getBase64Image(filePath) {
 function generateBarcode(person_id, codeText, filePath) {
   return new Promise((resolve, reject) => {
     bwipjs.toBuffer({
-      bcid: 'code128',
-      text: codeText,
-      scale: 3,
-      height: 10,
-      includetext: true,
-      textxalign: 'center',
-      textyoffset: 2,
+        bcid: 'code128',
+        text: codeText,
+        scale: 3,
+        height: 10,
+        includetext: true,
+        textxalign: 'center',
+        textyoffset: 2,
+        barcolor: 'FFFFFF',
+        textcolor: 'FFFFFF'
     }, (err, png) => {
       if (err) return reject(err);
       try {
@@ -108,7 +110,7 @@ async function generatePDF(person_id) {
   const fileName = `ticket_person_${person_id}.pdf`;
   const outputPath = path.resolve(ticketsDir, fileName);
 
-  const eventCode = 'WB2025_';
+  const eventCode = 'HB2026_';
   const key = parseInt(process.env.ENC_KEY);
   if (isNaN(key)) {
     console.error('❌ ENV KEY ist ungültig oder nicht gesetzt');
@@ -145,7 +147,7 @@ async function generatePDF(person_id) {
       tb.kaeufer_id,
       p.vorname,
       p.nachname,
-      p.age
+      p.email
     FROM 
       person p
     JOIN 
@@ -159,368 +161,527 @@ async function generatePDF(person_id) {
 
   const html = `
   <!DOCTYPE html>
-  <html lang="de">
-  <head>
-      <meta charset="utf-8">
-      <title>Weihnachtsball Ticket</title>
-      <link rel="stylesheet" href="style.css">
-      <link rel="stylesheet" href="../../client/styles/tables.css">
-      <style>
-        @page {
-          margin: 0;
-          size: A4;
-        }
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Unmuted – Ticket</title>
 
-        :root{
-            --black: #000;
-            --blackLighter: #231c3f;
-            --border: rgba(35, 28, 63, 0.4);
-            --grey: #484459;
-            --greyLighter: #777484;
-            --primaryColor: #fffcf4;
-            --primaryDarker: #f1f1f1;
-            --primaryVeryDark: #e3e3e3;
-            --secondaryColor: #7F63F4;
-            --secondaryColorDarker: #6a48f1;
-            --atentionColor: #f14848;
-            --pureRed: #ff0000;
-            --signalRed: #ff1a1a;
-            --signalShineRed: rgba(255, 0, 0, 0.6);
-            --signalGreen: #00cc44;
-            --signalShineGreen: rgba(0, 255, 0, 0.5);
-            --hover: rgba(127, 99, 244, 0.15);
-            --selected: rgba(127, 99, 244, 0.3);
-            --headingFontSize: 1.5rem;
-            --borderRadius: 0.4rem;
-        }
+  <style>
+    @page {
+      margin: 0;
+      size: A4;
+    }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+    /* =========================
+       Design Tokens – Unmuted
+       ========================= */
+    :root {
+    --black: #000;
+    --blackLighter: #231c3f;
+    --ticketBackground: #17191f;
+    --ticketSection: #101114;
+    --ticketField: #252731;
 
-        .ticket {
-            border: 2px solid #333;
-            max-height: 1150px;
-            box-sizing: border-box;
-            display: grid;
-            grid-template-columns: 1fr;
-            grid-template-rows: 100px 1.5fr 1fr 1fr 50px;
-            grid-column-gap: 0px;
-            grid-row-gap: 0px; 
-            aspect-ratio: 1/1.414;
-        }
+    --border: rgba(35, 28, 63, 0.4);
+    --grey: #484459;
+    --greyLighter: #777484;
 
-        header{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-direction: row;
-            height: 100px;
-            background-color: var(--secondaryColor);
-            padding: 0 0cm 0 1cm;
-            color: var(--primaryColor);
-        }
+    --primaryColor: #fffcf4;
+    --primaryDarker: #f1f1f1;
 
-        #metis-logo{
-            height: 50%;
-            width: auto;
-        }
+    --secondaryColor: #7F63F4;
+    --secondaryColorDarker: #6a48f1;
 
-        #buyNewTicketsQrCode{
-            height: 100%;
-            width: auto;
-        }
+    --atentionColor: #f14848;
+    --successGreen: #00cb11;
+}
 
-        .headliner {
-            text-align: center;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--ticketBackground);
+}
 
-        .headliner h1{
-            margin: 0;
-            text-align: center;
-        }
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
 
-        .headliner p{
-            margin: 0;
-            text-align: center;
-        }
 
-        .info {
-            font-size: 1.2em;
-            line-height: 1.6;
-            /*border: 2px dashed blue;*/
-        }
+/* =========================================================
+   TICKET
+   ========================================================= */
 
-        table{
-            height: fit-content;
-            width: calc(100% - 20px);
-            table-layout: auto;
-            border-collapse: collapse;
-            text-align: left;
-            margin: 2rem 10px 0 10px;
-            position: relative;
-        }
+.ticket {
+    width: 210mm;
+    height: 297mm;
+    margin: 0;
+    padding: 0;
+}
 
-        table caption{
-            font-size: 1.25rem;
-            font-weight: bold;
-            text-align: left;
-            margin-bottom: 1em;
-            caption-side: top;
-            text-align: left;
-            top: 0;
-            left: 0;
-            /*background-color: var(--secondaryColor);*/
-            color: var(--blackLighter);
-            border-bottom: 2px solid var(--secondaryColor);
-        }
+.ticket-pdf {
+    width: 210mm;
+    height: 297mm;
 
-        table thead{
-            margin: 2rem 0 0 0;
-        }
+    margin: 0;
+    padding: 0;
 
-        #service caption {
-            font-weight: bold;
-            text-align: left;
-            margin-bottom: 1em;
-        }
+    box-sizing: border-box;
 
-        #service th,
-        #service td {
-            padding: 0.2em;
-            text-align: left;
-        }
+    background-color: var(--ticketBackground);
+    color: var(--primaryColor);
 
-        #service th {
-            width: 40%;
-        }
+    display: flex;
+    flex-direction: column;
 
-        #teilnahmebedingungen td{
-            font-size: 16px;
-        }
+    overflow: hidden;
+}
 
-        .bc {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            /*border: 2px dashed red;*/
-        }
 
-        footer {
-            text-align: center;
-            font-size: 0.9em;
-            color: #555;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            /*border: 2px dashed green;*/
-        }
+/* =========================================================
+   HEADER
+   ========================================================= */
 
-        footer p{
-            margin: 0 auto;
-        }
+.ticket-pdf-header {
+    height: 150px;
 
-        :root{
-            --black: #000;
-            --blackLighter: #231c3f;
-            --border: rgba(35, 28, 63, 0.4);
-            --grey: #484459;
-            --greyLighter: #777484;
-            --primaryColor: #fffcf4;
-            --primaryDarker: #f1f1f1;
-            --primaryVeryDark: #e3e3e3;
-            --secondaryColor: #7F63F4;
-            --secondaryColorDarker: #6a48f1;
-            --atentionColor: #f14848;
-            --pureRed: #ff0000;
-            --hover: rgba(127, 99, 244, 0.15);
-            --selected: rgba(127, 99, 244, 0.3);
-            --headingFontSize: 1.5rem;
-        }
+    padding: 0 30px;
 
-        #displayAllTicketsContainer{
-            display: none;
-        }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-        .table_component {
-            margin: 2rem 0 0 0;
-            padding: 0.5rem;
+    background-color: var(--secondaryColor);
+    color: var(--primaryColor);
+}
 
-            overflow: auto;
-            width: 100%;
-            background-color: var(--primaryColor);
+.ticket-pdf-header-left {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
 
-            border-radius: 0.4rem;
-            position: relative;
-        }
+.ticket-pdf-logo {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+}
 
-        .table_component table {
-            height: 100%;
-            width: 100%;
-            table-layout: auto;
-            border-collapse:collapse;
-            text-align: left;
-            margin: 2rem 0 0 0;
-        }
+.ticket-pdf-title {
+    display: flex;
+    flex-direction: column;
+}
 
-        .table_component caption {
-            caption-side: top;
-            text-align: left;
-            position: absolute;
-            top: 0;
-            left: 0;
-            background-color: var(--secondaryColor);
-            padding: 0.5rem;
-            color: var(--primaryColor);
-            border-bottom-right-radius: 0.4rem;
-        }
+.ticket-pdf-title h1 {
+    margin: 0;
 
-        .table_component th {
-            color: #000000;
-            padding: 5px;
-        }
+    color: var(--primaryColor);
 
-        .table_component td {
-            color: #000000;
-            padding: 5px;
-        }
+    font-size: 34px;
+    font-weight: 800;
+}
 
-        #setFinancing{
-            margin: 1rem 0 0 0;
-        }
+.ticket-pdf-title p {
+    margin: 4px 0 0;
 
-        #financing{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-direction: row;
-        }
+    color: var(--primaryColor);
 
-        #financing #money-form-left{
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-        }
+    font-size: 18px;
+}
 
-        input[type='number'] {
-            -moz-appearance:textfield;
-            appearance: textfield;
-        }
 
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-        }
+/* =========================================================
+   QR-CODE
+   ========================================================= */
 
-        #financing #money-form-left select{
-            background-color: var(--primaryColor);
-            border:none;
-            border-radius: 0.4rem;
-            padding: 1rem;
-            margin: 0 0 0 1rem;
-        }
+.ticket-pdf-qr {
+    width: 90px;
+    height: 90px;
+}
 
-        #financing #money-form-right{
-            transform: translateX(1rem);
-        }
-      </style>
-  </head>
-  <body>
-      <section class="ticket">
-          <header>
-              <div id="metis-logo">
-                <img src="${logoBase64}" alt="Logo" height="100%" width="auto">
-              </div>
-              <div id="headliner" class="headliner">
-                  <h1>Weihnachtsball 2025</h1>
-                  <p>Marie-Curie Gymnasium</p>
-              </div>
-              <div id="buyNewTicketsQrCode" style="padding: 16px !important; display: flex; justify-content: center; align-items: center;">
-                <img src="${qrBase64}" alt="QR-Code for new Tickets" height="75%" width="auto">
-              </div>
-          </header>
-          <div class="info">
-              <table id="customer">
-                  <caption>Deine Daten:</caption>
-                  <thead>
-                      <tr>
-                          <th>ID</th>
-                          <th>Käufer-ID</th>
-                          <th>Vorname</th>
-                          <th>Nachname</th>
-                          <th>Alter</th>
-                      </tr>
-                  </thead>
 
-                  <tbody>
-                      <tr>
-                          <td>${person_id}</td>
-                          <td>${data[0].kaeufer_id}</td>
-                          <td>${data[0].vorname}</td>
-                          <td>${data[0].nachname}</td>
-                          <td>${data[0].age}</td>
-                      </tr>
-                  </tbody>
-              </table>
-              <table id="service">
-                  <caption>Hinweise zur Veranstaltung:</caption>
-                  <tbody>
-                      <tr>
-                          <th>Einlass</th>
-                          <td>18:45 Uhr / 19.12.2025</td>
-                      </tr>
-                      <tr>
-                          <th>Ende Einlass</th>
-                          <td>21:00 Uhr / 19.12.2025</td>
-                      </tr>
-                      <tr>
-                          <th>Beginn der Veranstaltung</th>
-                          <td>20:00 Uhr / 19.12.2025</td>
-                      </tr>
-                      <tr>
-                          <th>Ende der Veranstaltung</th>
-                          <td>01:00 Uhr / 20.12.2025</td>
-                      </tr>
-                      <tr>
-                          <th>Adresse</th>
-                          <td>Friedrich-Wolf-Straße 31, Oranienburg</td>
-                      </tr>
-                      <tr>
-                          <th>Mindestalter</th>
-                          <td>16</td>
-                      </tr>
-                  </tbody>
-              </table>
-          </div>
-          <div class="bc">  
-              <img src="${barcodeBase64}" alt="Bar-Code">
-              <!--<img src="{{ qr_path }}" alt="Bar-Code">-->
-          </div>
-          <table id="teilnahmebedingungen">
-                  <caption>Teilnahmebedingungen:</caption>
-                  <tr>
-                      <th></th>
-                      <td>Einlass ab 16 Jahren (unter 18 nur bis 24:00 Uhr oder mit Erziehungsbeauftragung gemäß JuSchG). Keine Rücknahme oder Erstattung von Tickets. Keine Haftung für Sach- oder Personenschäden. Mit Betreten des Geländes erklären Sie sich mit möglichen Foto- und Videoaufnahmen einverstanden. Es gelten die vollständigen Teilnahmebedingungen unter:
-                          <br><a href="https://www.curiegymnasium.de/client/bedingungen.php">curiegymnasium.de/client/bedingungen.php</a>
-                      </td>
-                  </tr>
-            </table>
-          <footer>
-              <p>Bitte beim Einlass bereithalten · Kein Wiedereinlass möglich · Alle Angaben ohne Gewähr</p>
-              <p>Weitere Informationen: Impressum & Datenschutz: <a href="https://curiegymnasium.de/client/imprint.php">https://curiegymnasium.de/client/imprint.php</a></p>
-          </footer>
-      </section>
-  </body>
-  </html>
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.ticket-pdf-content {
+    padding: 30px;
+    flex: 1;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   SECTIONS
+   ========================================================= */
+
+.ticket-pdf-section {
+    margin-bottom: 7px;
+}
+
+.ticket-pdf-section-title {
+    margin: 0;
+
+    padding: 15px 20px;
+
+    background-color: var(--ticketSection);
+
+    color: #d6b86a;
+
+    font-size: 22px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+    border-radius: 14px 14px 0 0;
+}
+
+
+/* =========================================================
+   DATA
+   ========================================================= */
+
+.ticket-pdf-data {
+    background-color: var(--ticketField);
+
+    border-radius: 0 0 14px 14px;
+
+    overflow: hidden;
+}
+
+.ticket-pdf-row {
+    display: grid;
+    grid-template-columns: 35% 65%;
+
+    min-height: 48px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.ticket-pdf-row:last-child {
+    border-bottom: none;
+}
+
+.ticket-pdf-label {
+    display: flex;
+    align-items: center;
+
+    padding: 10px 20px;
+
+    color: #aaaab3;
+
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.ticket-pdf-value {
+    display: flex;
+    align-items: center;
+
+    padding: 10px 20px;
+
+    color: #f1f1f4;
+
+    font-size: 17px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   BARCODE
+   ========================================================= */
+
+.ticket-pdf-barcode-wrapper {
+    padding: 25px 0 35px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.ticket-pdf-barcode {
+    max-width: 480px;
+    width: 75%;
+    height: auto;
+}
+
+.ticket-pdf-barcode-number {
+    margin-top: 8px;
+
+    color: var(--primaryColor);
+
+    font-size: 25px;
+    letter-spacing: 5px;
+}
+
+
+/* =========================================================
+   HINWEISE
+   ========================================================= */
+
+.ticket-pdf-notices {
+    background-color: var(--ticketField);
+
+    padding: 18px 20px;
+
+    border-radius: 0 0 14px 14px;
+}
+
+.ticket-pdf-notices p {
+    margin: 0 0 12px;
+
+    color: #aaaab3;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.ticket-pdf-notices p:last-child {
+    margin-bottom: 0;
+}
+
+.ticket-pdf-notices strong {
+    color: #d6d6dc;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.ticket-pdf-footer {
+    min-height: 55px;
+
+    padding: 0 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #111318;
+
+    color: var(--greyLighter);
+
+    font-size: 13px;
+    letter-spacing: 0.5px;
+
+    text-align: center;
+    flex-shrink: 0;
+}
+  </style>
+</head>
+
+<body>
+  <section class="ticket">
+
+    <div class="ticket-pdf">
+
+    <!-- HEADER -->
+    <div class="ticket-pdf-header">
+
+        <div class="ticket-pdf-header-left">
+
+            <img
+                class="ticket-pdf-logo"
+                src="${logoBase64}"
+                alt="Metis"
+            >
+
+            <div class="ticket-pdf-title">
+                <h1>Herbstball 2026</h1>
+                <p>Marie-Curie Gymnasium</p>
+            </div>
+
+        </div>
+
+        <img
+            class="ticket-pdf-qr"
+            src="${qrBase64}"
+            alt="Tickets kaufen"
+        >
+
+    </div>
+
+
+    <!-- CONTENT -->
+    <div class="ticket-pdf-content">
+
+
+        <!-- TICKETINHABER -->
+        <div class="ticket-pdf-section">
+
+            <div class="ticket-pdf-section-title">
+                Ticketinhaber
+            </div>
+
+            <div class="ticket-pdf-data">
+
+                <div class="ticket-pdf-row">
+                    <div class="ticket-pdf-label">
+                        Ticket-ID
+                    </div>
+
+                    <div class="ticket-pdf-value">
+                        ${person_id}
+                    </div>
+                </div>
+
+
+                <!--<div class="ticket-pdf-row">
+                    <div class="ticket-pdf-label">
+                        Käufer-ID
+                    </div>
+
+                    <div class="ticket-pdf-value">
+                        ${data[0].kaeufer_id}
+                    </div>
+                </div>-->
+
+
+                <div class="ticket-pdf-row">
+                    <div class="ticket-pdf-label">
+                        Vorname
+                    </div>
+
+                    <div class="ticket-pdf-value">
+                        ${data[0].vorname}
+                    </div>
+                </div>
+
+
+                <div class="ticket-pdf-row">
+                    <div class="ticket-pdf-label">
+                        Nachname
+                    </div>
+
+                    <div class="ticket-pdf-value">
+                        ${data[0].nachname}
+                    </div>
+                </div>
+
+
+                <div class="ticket-pdf-row">
+                    <div class="ticket-pdf-label">
+                        Email
+                    </div>
+
+                    <div class="ticket-pdf-value">
+                        ${data[0].email}
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- VERANSTALTUNG -->
+        <div class="ticket-pdf-section">
+
+            <div class="ticket-pdf-section-title">
+                Veranstaltungsdetails
+            </div>
+
+            <div class="ticket-pdf-data">
+
+                <div class="ticket-pdf-row">
+                    <div class="ticket-pdf-label">
+                        Datum & Uhrzeit
+                    </div>
+
+                    <div class="ticket-pdf-value">
+                        16.10.2026 20:00:00
+                    </div>
+                </div>
+
+
+                <div class="ticket-pdf-row">
+                    <div class="ticket-pdf-label">
+                        Einlass
+                    </div>
+
+                    <div class="ticket-pdf-value">
+                        18:45 Uhr
+                    </div>
+                </div>
+
+
+                <div class="ticket-pdf-row">
+                    <div class="ticket-pdf-label">
+                        Ort
+                    </div>
+
+                    <div class="ticket-pdf-value">
+                        Friedrich-Wolf-Straße 31, Oranienburg
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- BARCODE -->
+
+        <div class="ticket-pdf-barcode-wrapper">
+
+            <img
+                class="ticket-pdf-barcode"
+                src="${barcodeBase64}"
+                alt="Ticket Barcode"
+            >
+
+        </div>
+
+
+        <!-- HINWEISE -->
+
+        <div class="ticket-pdf-section">
+
+            <div class="ticket-pdf-section-title">
+                Hinweise
+            </div>
+
+            <div class="ticket-pdf-notices">
+
+                <p>
+                    Dieses Ticket berechtigt zum Eintritt zur oben
+                    genannten Vorstellung von
+                    <strong>Herbstball 2026</strong><br>
+
+                    Bitte halten Sie dieses Ticket
+                    (digital oder ausgedruckt)
+                    beim Einlass bereit.<br>
+
+                    Einlass nur zur gebuchten Vorstellung.
+                    Kein Wiedereinlass nach Verlassen des Veranstaltungsgeländes.<br><br>
+
+                    Weitere Informationen unter:
+                    <strong>curiegymnasium.de</strong><br>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="ticket-pdf-footer">
+        Herbstball 2026 · Alle Angaben ohne Gewähr · Powered by Metis
+    </div>
+
+</div>
+
+  </section>
+</body>
+</html>
   `
 
   const browser = await puppeteer.launch({ headless: true, product: 'firefox' });

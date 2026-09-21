@@ -112,7 +112,7 @@ input[type="submit"], input[type="button"]{
 }
 
 .ageLabel::after{
-    content: 'Am 19.12.2025';
+    content: 'Am 16.10.2026';
     position: absolute;
     bottom: -75%;
     left: 0px;
