@@ -189,8 +189,8 @@ async function generatePDF(person_id) {
     --primaryColor: #fffcf4;
     --primaryDarker: #f1f1f1;
 
-    --secondaryColor: #7F63F4;
-    --secondaryColorDarker: #6a48f1;
+    --secondaryColor: #e98316;
+    --secondaryColorDarker: #e98316;
 
     --atentionColor: #f14848;
     --successGreen: #00cb11;
@@ -318,7 +318,7 @@ body {
    ========================================================= */
 
 .ticket-pdf-section {
-    margin-bottom: 7px;
+    margin-bottom: 14px;
 }
 
 .ticket-pdf-section-title {
@@ -395,7 +395,7 @@ body {
    ========================================================= */
 
 .ticket-pdf-barcode-wrapper {
-    padding: 25px 0 35px;
+    padding: 25px 0 25px;
 
     display: flex;
     flex-direction: column;
