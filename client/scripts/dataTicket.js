@@ -66,11 +66,11 @@ class Ticket {
             if (Array.isArray(data.results)) {
                 const hasFail = data.results.some(result => result.status === 'fail');
 
-                if (hasFail) {
-                    displayMessage('duplicate');
+                if (!!hasFail) {
+                    displayMessage(data.results[0].detailedError);
                     for (const res of data.results) {
                         if (res.status === "fail") {
-                            const ticketDiv = findeTicketDivMitNamen(res.vorname, res.nachname);
+                            const ticketDiv = findeTicketDivMitNamen(res.firstName, res.lastName);
                             if (ticketDiv) {
                                 makeFaltyTicketVisible(ticketDiv);
                             }

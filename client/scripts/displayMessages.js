@@ -15,11 +15,27 @@ export function displayMessage(msg, details = null){
                 displayContainer.style.transform = 'translate(-50%, -200%)';
             },5000);
             break;
+        
+        case 'duplicateEmailSelfPurchase':
+            displayElementText.textContent = 'Diese Email-Adresse ist bereits einem anderem Käufer zugeordnet. Ein einzelnes Ticket kann damit nicht erneut gekauft werden.';
+            displayContainer.style.transform = 'translate(-50%, 0%)';
+            setTimeout(() => {
+                displayContainer.style.transform = 'translate(-50%, -200%)';
+            },5000);
+            break;
 
         case 'duplicate':
-            displayElementText.textContent = 'Registrierung fehlgeschlagen: Doppeltes Ticket erkannt';
+            displayElementText.textContent = 'Diese Person hat bereits ein Ticket.';
             displayContainer.style.transform = 'translate(-50%, 0%)';
             displayContainer.style.backgroundColor = 'var(--pureRed)';
+            setTimeout(() => {
+                displayContainer.style.transform = 'translate(-50%, -200%)';
+            },5000);
+            break;
+
+        case 'duplicateEmailKaeufer':
+            displayElementText.textContent = 'Diese Email-Adresse ist bereits einem anderem Käufer zugeordnet.';
+            displayContainer.style.transform = 'translate(-50%, 0%)';
             setTimeout(() => {
                 displayContainer.style.transform = 'translate(-50%, -200%)';
             },5000);
@@ -115,7 +131,31 @@ export function displayMessage(msg, details = null){
             },5000);
             break;
 
+        case 'noTicket':
+            displayElementText.textContent = 'Es wurde kein Ticket angegeben';
+            displayContainer.style.backgroundColor = 'var(--pureRed)';
+            displayContainer.style.transform = 'translate(-50%, 0%)';
+            setTimeout(() => {
+                displayContainer.style.transform = 'translate(-50%, -200%)';
+            },5000);
+            break;
+
+        case 'invalidTicketData':
+            displayElementText.textContent = 'Ungülgtige Ticketdaten enthalten';
+            displayContainer.style.backgroundColor = 'var(--pureRed)';
+            displayContainer.style.transform = 'translate(-50%, 0%)';
+            setTimeout(() => {
+                displayContainer.style.transform = 'translate(-50%, -200%)';
+            },5000);
+            break;
+
         default:
+            displayElementText.textContent = 'Ein unbekannter Fehler ist aufgetreten';
+            displayContainer.style.backgroundColor = 'var(--pureRed)';
+            displayContainer.style.transform = 'translate(-50%, 0%)';
+            setTimeout(() => {
+                displayContainer.style.transform = 'translate(-50%, -200%)';
+            },5000);
             break;
     }
 }

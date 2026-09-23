@@ -164,7 +164,7 @@ try {
 <html>
 <head>
     <meta charset='UTF-8'>
-    <title>Ticketreservierung Weihnachtsball 2025 MCG</title>
+    <title>Ticketreservierung Herbstball 2026 MCG</title>
     <style>
         body {
             margin: 0;
@@ -278,7 +278,7 @@ $nachricht .= "
             <p>Für eine Barzahlung der Tickets stehen euch die Termine am Dienstag und Donnerstag, in der großen Pause (11:10 Uhr - 11:40 Uhr), vor der Bibliothek des Marie-Curie Gymnasiums zur Verfügung.</p><br><br>
             <p>Wenn du schon jetzt online bezahlen möchtest, scanne den folgenden PayPal-QR-Code und überweise die oben genannte Gesamtsumme mit dem folgenden Verwendungszweck:</p><br><br>
             <strong style='font-size: 12px;'>'" . str_replace("@", "at", $empfaengerPerson->email) . " Herbstball'</strong>
-            </p><br>
+            <br>
             <img src='cid:paypal_qr' alt='QR zur Bezahlung' style='max-width: 100%; height: auto; border-radius: 6px;'><br>
             <p>Alternativ können die Tickets am Abend der Veranstaltung auch in bar bezahlt werden.</p>
         </div>
@@ -319,7 +319,7 @@ $nachricht .= "
     // Nachricht
     $mail->AddEmbeddedImage('../mail/images/paypal.jpeg', 'paypal_qr');
     $mail->isHTML(true);
-    $mail->Subject = 'Fancytastische Buchungsbestätigung: Weihnachtsball 2025';
+    $mail->Subject = 'Fancytastische Buchungsbestätigung: Herbstball 2026';
     $mail->Body    = $nachricht;
 
     $mail->send();
