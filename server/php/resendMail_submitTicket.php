@@ -45,6 +45,8 @@ function getIdForMail($conn, $vorname, $nachname, $email){
         return null;
     }
 
+    $kaeuferId = null;
+
     $getIdStmt->bind_result($kaeuferId);
     if ($getIdStmt->fetch()) {
         $getIdStmt->close();

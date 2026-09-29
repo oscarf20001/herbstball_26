@@ -149,6 +149,42 @@ export function displayMessage(msg, details = null){
             },5000);
             break;
 
+        case 'resendMail_emptyEmail':
+            displayElementText.textContent = 'Bitte trage eine Email in das Input-Feld ein';
+            displayContainer.style.backgroundColor = 'var(--pureRed)';
+            displayContainer.style.transform = 'translate(-50%, 0%)';
+            setTimeout(() => {
+                displayContainer.style.transform = 'translate(-50%, -200%)';
+            },5000);
+            break;
+
+        case 'lockedButton':
+            displayElementText.textContent = 'Button ist gesperrt';
+            displayContainer.style.backgroundColor = 'var(--pureRed)';
+            displayContainer.style.transform = 'translate(-50%, 0%)';
+            setTimeout(() => {
+                displayContainer.style.transform = 'translate(-50%, -200%)';
+            },5000);
+            break;
+
+        case 'missingMethod':
+            displayElementText.textContent = 'Bitte wähle eine Art von Email aus, die du senden möchtest';
+            displayContainer.style.backgroundColor = 'var(--pureRed)';
+            displayContainer.style.transform = 'translate(-50%, 0%)';
+            setTimeout(() => {
+                displayContainer.style.transform = 'translate(-50%, -200%)';
+            },5000);
+            break;
+
+        case 'errorSendingPDF':
+            displayElementText.textContent = 'Fehler beim senden der PDF! Bitte Info an Oscar: ' + details;
+            displayContainer.style.backgroundColor = 'var(--pureRed)';
+            displayContainer.style.transform = 'translate(-50%, 0%)';
+            setTimeout(() => {
+                displayContainer.style.transform = 'translate(-50%, -200%)';
+            },5000);
+            break;
+
         default:
             displayElementText.textContent = 'Ein unbekannter Fehler ist aufgetreten';
             displayContainer.style.backgroundColor = 'var(--pureRed)';

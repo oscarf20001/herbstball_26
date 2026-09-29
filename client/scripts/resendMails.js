@@ -9,16 +9,19 @@ btn.addEventListener('click', () => {
     const input = document.getElementById('f-email');
 
     if (!input.value.trim()) {
+        displayMessage("resendMail_emptyEmail");
         console.error("Fetch bezüglich Käufer für neue Emails abgelehnt: Input-Feld leer");
         return;
     }
 
     if (btn.classList.contains('inactive')) {
+        displayMessage("lockedButton");
         console.error("Fetch bezüglich Käufer für neue Emails abgelehnt: Button gesperrt!");
         return;
     }
 
     if(selectElement.value == '' || selectElement.value === ''){
+        displayMessage("missingMethod");
         console.error("Fetch bezüglich Käufer für neue Emails abgelehnt: Keine Methode ausgewählt");
         return;
     }
@@ -87,6 +90,25 @@ function resendEmail(data, method){
                 console.log('Serverantwort:', data);
             })
             .catch(error => {
+                console.error('Fehler beim Senden:', error);
+            });
+
+            break;
+
+        case 'ticket':
+            console.info("Ticket senden");
+            
+            fetch('../server/php/resendMail_sendTicketPDF.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Serverantwort:', data);
+            })
+            .catch(error => {
+                displayMessage('errorSendingPDF', error)
                 console.error('Fehler beim Senden:', error);
             });
 
