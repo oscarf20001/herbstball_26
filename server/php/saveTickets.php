@@ -1,8 +1,5 @@
 <?php
 
-use Dotenv\Store\File\Reader;
-use Safe\Exceptions\ReadlineException;
-
 header("Content-Type: application/json; charset=utf-8");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
@@ -179,7 +176,9 @@ function insertPerson(mysqli $conn, Person $person): int
         $error = $stmt->error;
         $stmt->close();
 
-        throw new RuntimeException("Fehler beim Einfügen der Person: {$error}");
+        throw new RuntimeException(
+            "Fehler beim Einfügen der Person: {$error}"
+        );
     }
 
     $id = (int) $stmt->insert_id;
@@ -219,7 +218,9 @@ function getKaeuferByPersonData(
     if (!$stmt->execute()) {
         $stmt->close();
 
-        throw new RuntimeException("Fehler beim Ausführen der Käuferabfrage.");
+        throw new RuntimeException(
+            "Fehler beim Ausführen der Käuferabfrage."
+        );
     }
 
     $stmt->bind_result($kaeuferId);
@@ -235,8 +236,10 @@ function getKaeuferByPersonData(
     return null;
 }
 
-function getKaeuferByEmail(mysqli $conn, string $email): ?int
-{
+function getKaeuferByEmail(
+    mysqli $conn,
+    string $email
+): ?int {
     $stmt = $conn->prepare("
         SELECT k.id
         FROM kaeufer k
@@ -257,7 +260,9 @@ function getKaeuferByEmail(mysqli $conn, string $email): ?int
     if (!$stmt->execute()) {
         $stmt->close();
 
-        throw new RuntimeException("Fehler beim Ausführen der E-Mail-Prüfung.");
+        throw new RuntimeException(
+            "Fehler beim Ausführen der E-Mail-Prüfung."
+        );
     }
 
     $stmt->bind_result($id);
@@ -273,42 +278,10 @@ function getKaeuferByEmail(mysqli $conn, string $email): ?int
     return null;
 }
 
-function personAlreadyExistsAsKaeufer(mysqli $conn, int $personId): bool
-{
-    $stmt = $conn->prepare("
-        SELECT 1
-        FROM kaeufer
-        WHERE person_id = ?
-        LIMIT 1
-    ");
-
-    if (!$stmt) {
-        throw new RuntimeException(
-            "Fehler beim Vorbereiten der Käufer-Person-Prüfung."
-        );
-    }
-
-    $stmt->bind_param("i", $personId);
-
-    if (!$stmt->execute()) {
-        $stmt->close();
-
-        throw new RuntimeException(
-            "Fehler beim Ausführen der Käufer-Person-Prüfung."
-        );
-    }
-
-    $stmt->store_result();
-
-    $exists = $stmt->num_rows > 0;
-
-    $stmt->close();
-
-    return $exists;
-}
-
-function insertKaeufer(mysqli $conn, Kaeufer $kaeufer): int
-{
+function insertKaeufer(
+    mysqli $conn,
+    Kaeufer $kaeufer
+): int {
     $stmt = $conn->prepare("
         INSERT INTO kaeufer
         (
@@ -333,8 +306,9 @@ function insertKaeufer(mysqli $conn, Kaeufer $kaeufer): int
     $submited = $kaeufer->submited->format("Y-m-d H:i:s");
 
     /*
-     * Beim erstmaligen Anlegen existiert genau der
-     * im Käufer-Datensatz angegebene erste Kauf.
+     * Der Käufer besitzt bereits sein eigenes Ticket.
+     *
+     * Die weiteren Tickets werden später ergänzt.
      */
     $tickets = 1;
     $checked = 0;
@@ -370,8 +344,10 @@ function insertKaeufer(mysqli $conn, Kaeufer $kaeufer): int
 // TICKETBESITZER
 // =====================================================
 
-function ticketAlreadyExistsAnywhere(mysqli $conn, int $personId): bool
-{
+function ticketAlreadyExistsAnywhere(
+    mysqli $conn,
+    int $personId
+): bool {
     $stmt = $conn->prepare("
         SELECT 1
         FROM ticket_besitzer
@@ -390,7 +366,9 @@ function ticketAlreadyExistsAnywhere(mysqli $conn, int $personId): bool
     if (!$stmt->execute()) {
         $stmt->close();
 
-        throw new RuntimeException("Fehler beim Ausführen der Ticketprüfung.");
+        throw new RuntimeException(
+            "Fehler beim Ausführen der Ticketprüfung."
+        );
     }
 
     $stmt->store_result();
@@ -402,8 +380,52 @@ function ticketAlreadyExistsAnywhere(mysqli $conn, int $personId): bool
     return $exists;
 }
 
-function insertTicketBesitzer(mysqli $conn, TicketBesitzer $tb): void
-{
+function ticketExistsForKaeufer(
+    mysqli $conn,
+    int $kaeuferId,
+    int $personId
+): bool {
+    $stmt = $conn->prepare("
+        SELECT 1
+        FROM ticket_besitzer
+        WHERE kaeufer_id = ?
+          AND person_id = ?
+        LIMIT 1
+    ");
+
+    if (!$stmt) {
+        throw new RuntimeException(
+            "Fehler beim Vorbereiten der Käufer-Ticket-Prüfung."
+        );
+    }
+
+    $stmt->bind_param(
+        "ii",
+        $kaeuferId,
+        $personId
+    );
+
+    if (!$stmt->execute()) {
+        $stmt->close();
+
+        throw new RuntimeException(
+            "Fehler beim Ausführen der Käufer-Ticket-Prüfung."
+        );
+    }
+
+    $stmt->store_result();
+
+    $exists = $stmt->num_rows > 0;
+
+    $stmt->close();
+
+    return $exists;
+}
+
+function insertTicketBesitzer(
+    mysqli $conn,
+    TicketBesitzer $tb
+): void {
     $stmt = $conn->prepare("
         INSERT INTO ticket_besitzer
         (
@@ -419,7 +441,11 @@ function insertTicketBesitzer(mysqli $conn, TicketBesitzer $tb): void
         );
     }
 
-    $stmt->bind_param("ii", $tb->kaeufer_id, $tb->person_id);
+    $stmt->bind_param(
+        "ii",
+        $tb->kaeufer_id,
+        $tb->person_id
+    );
 
     if (!$stmt->execute()) {
         $error = $stmt->error;
@@ -461,7 +487,12 @@ function updateKaeuferTotals(
         );
     }
 
-    $stmt->bind_param("dii", $newCharges, $newTickets, $kaeuferId);
+    $stmt->bind_param(
+        "dii",
+        $newCharges,
+        $newTickets,
+        $kaeuferId
+    );
 
     if (!$stmt->execute()) {
         $error = $stmt->error;
@@ -488,14 +519,14 @@ if (!is_array($data) || count($data) < 1) {
 
     echo json_encode([
         "status" => "error",
-        "message" => "Leere oder ungültige JSON.",
+        "message" => "Leere oder ungültige JSON."
     ]);
 
     exit();
 }
 
 // =====================================================
-// GRUNDPRÜFUNGEN
+// KÄUFERDATEN
 // =====================================================
 
 $kaeuferData = $data[0];
@@ -505,7 +536,7 @@ if (!is_array($kaeuferData)) {
 
     echo json_encode([
         "status" => "error",
-        "message" => "Ungültige Käuferdaten.",
+        "message" => "Ungültige Käuferdaten."
     ]);
 
     exit();
@@ -518,136 +549,68 @@ $nachname = $kaeuferPerson->nachname;
 $email = $kaeuferPerson->email;
 
 // =====================================================
-// SONDERFALL ERMITTELN
+// TICKETANZAHL
 // =====================================================
 //
-// Beispiel:
+// data[0] = Käufer = eigenes Ticket
+// data[1...] = weitere Ticketbesitzer
 //
-// [
-//     {
-//         "vorname": "Oscar",
-//         "nachname": "Streich",
-//         "email": "oscar-streich@t-online.de",
-//         "tickets": 1
-//     }
-// ]
+// Deshalb:
 //
-// Hier existiert kein zweiter Datensatz.
-// Der Käufer ist gleichzeitig Ticketbesitzer.
+// 1 Person  => 1 Ticket
+// 2 Personen => 2 Tickets
+// 3 Personen => 3 Tickets
 //
 // =====================================================
 
-$selfTicketPurchase =
-    count($data) === 1 && (int) ($kaeuferData["tickets"] ?? 0) === 1;
+$requestedTickets = (int) ($kaeuferData["tickets"] ?? count($data));
+
+$actualTickets = count($data);
+
+if ($requestedTickets !== $actualTickets) {
+    http_response_code(400);
+
+    echo json_encode([
+        "status" => "error",
+        "message" =>
+            "Die angegebene Ticketanzahl stimmt nicht mit den Ticketbesitzern überein.",
+        "requestedTickets" => $requestedTickets,
+        "actualTickets" => $actualTickets
+    ]);
+
+    exit();
+}
 
 // =====================================================
-// TRANSAKTION STARTEN
+// TRANSAKTION
 // =====================================================
 
 $conn->begin_transaction();
 
 try {
-    // =================================================
-    // KÄUFER ERMITTELN
-    // =================================================
-
-    $existingKaeuferId = getKaeuferByPersonData($conn, $vorname, $nachname);
 
     // =================================================
-    // SONDERFALL:
-    // EIN TICKET FÜR DEN KÄUFER SELBST
+    // KÄUFER SUCHEN
     // =================================================
 
-    if ($selfTicketPurchase) {
-        // =================================================
-        // EINZELTICKET:
-        // E-MAIL DARF NOCH NICHT ALS KÄUFER EXISTIEREN
-        // =================================================
-
-        $existingKaeuferByEmail = getKaeuferByEmail($conn, $email);
-
-        if ($existingKaeuferByEmail !== null) {
-            throw new BookingException(
-                "Die E-Mail-Adresse {$email} wird bereits von einem Käufer verwendet. Ein einzelnes Ticket kann damit nicht erneut gekauft werden.",
-                "duplicateEmailSelfPurchase",
-                $vorname,
-                $nachname, 
-                $email
-            );
-        }
-
-        // -------------------------------------------------
-        // Danach normale Personenprüfung
-        // -------------------------------------------------
-
-        $existingPersonId = personExistsByData($conn, $vorname, $nachname);
-
-        if ($existingPersonId !== null) {
-            $kaeuferPerson->id = $existingPersonId;
-
-            if (ticketAlreadyExistsAnywhere($conn, $kaeuferPerson->id)) {
-                throw new BookingException(
-                    "{$vorname} {$nachname} besitzt bereits ein Ticket und kann nicht erneut hinzugefügt werden.",
-                    "duplicate",
-                    $vorname,
-                    $nachname, 
-                    $email
-                );
-            }
-        } else {
-            $kaeuferPerson->id = insertPerson($conn, $kaeuferPerson);
-        }
-
-        // Neuer Käufer
-        $kaeufer = new Kaeufer($kaeuferPerson, $kaeuferData);
-
-        $kaeufer->id = insertKaeufer($conn, $kaeufer);
-
-        // Käufer ist Ticketbesitzer
-        insertTicketBesitzer(
-            $conn,
-            new TicketBesitzer($kaeufer->id, $kaeuferPerson->id)
-        );
-
-        $conn->commit();
-
-        echo json_encode([
-            "status" => "finished",
-            "kaeufer" => [
-                "id" => $kaeufer->id,
-                "vorname" => $kaeuferPerson->vorname,
-                "nachname" => $kaeuferPerson->nachname,
-                "email" => $kaeuferPerson->email,
-            ],
-            "newTickets" => 1,
-            "newCharges" => $kaeuferPerson->sum,
-            "results" => [
-                [
-                    "status" => "success",
-                    "message" => "{$kaeuferPerson->vorname} {$kaeuferPerson->nachname} wurde als Ticketbesitzer hinzugefügt.",
-                    "vorname" => $kaeuferPerson->vorname,
-                    "nachname" => $kaeuferPerson->nachname,
-                ],
-            ],
-        ]);
-
-        exit();
-    }
-
-    // =================================================
-    // NORMALER FALL:
-    // KÄUFER + EIN ODER MEHRERE ANDERE TICKETS
-    // =================================================
+    $existingKaeuferId = getKaeuferByPersonData(
+        $conn,
+        $vorname,
+        $nachname
+    );
 
     // =================================================
     // FALL 1:
-    // Käufer existiert bereits exakt
-    //
-    // → Weitere Tickets sind erlaubt
+    // KÄUFER EXISTIERT BEREITS
     // =================================================
 
     if ($existingKaeuferId !== null) {
-        $kaeuferPerson->id = personExistsByData($conn, $vorname, $nachname);
+
+        $kaeuferPerson->id = personExistsByData(
+            $conn,
+            $vorname,
+            $nachname
+        );
 
         if ($kaeuferPerson->id === null) {
             throw new RuntimeException(
@@ -655,28 +618,43 @@ try {
             );
         }
 
-        $kaeufer = new Kaeufer($kaeuferPerson, $kaeuferData);
+        $kaeufer = new Kaeufer(
+            $kaeuferPerson,
+            $kaeuferData
+        );
 
         $kaeufer->id = $existingKaeuferId;
+
+        /*
+         * Der Käufer darf nicht nochmals als eigenes Ticket
+         * eingefügt werden, wenn er bereits eines besitzt.
+         *
+         * Das wird später berücksichtigt.
+         */
     }
 
     // =================================================
     // FALL 2:
-    // Kein exakter Käufer gefunden
+    // KÄUFER EXISTIERT NOCH NICHT
     // =================================================
+
     else {
+
         // -------------------------------------------------
-        // E-Mail bereits bei anderem Käufer?
+        // E-Mail darf noch keinem anderen Käufer gehören
         // -------------------------------------------------
 
-        $otherKaeuferId = getKaeuferByEmail($conn, $email);
+        $otherKaeuferId = getKaeuferByEmail(
+            $conn,
+            $email
+        );
 
         if ($otherKaeuferId !== null) {
             throw new BookingException(
                 "Diese E-Mail-Adresse wird bereits von einem anderen Käufer verwendet.",
                 "duplicateEmailKaeufer",
-                $vorname, 
-                $nachname, 
+                $vorname,
+                $nachname,
                 $email
             );
         }
@@ -685,61 +663,112 @@ try {
         // Person suchen
         // -------------------------------------------------
 
-        $existingPersonId = personExistsByData($conn, $vorname, $nachname);
+        $existingPersonId = personExistsByData(
+            $conn,
+            $vorname,
+            $nachname
+        );
 
         if ($existingPersonId !== null) {
+
             $kaeuferPerson->id = $existingPersonId;
+
+            /*
+             * Die Person existiert bereits, darf aber noch kein
+             * Ticket besitzen, weil sie sonst bereits jemand anderem
+             * zugeordnet wäre.
+             */
+            if (ticketAlreadyExistsAnywhere(
+                $conn,
+                $kaeuferPerson->id
+            )) {
+                throw new BookingException(
+                    "{$vorname} {$nachname} besitzt bereits ein Ticket und kann nicht erneut als Käufer verwendet werden.",
+                    "duplicate",
+                    $vorname,
+                    $nachname,
+                    $email
+                );
+            }
+
         } else {
-            $kaeuferPerson->id = insertPerson($conn, $kaeuferPerson);
+
+            $kaeuferPerson->id = insertPerson(
+                $conn,
+                $kaeuferPerson
+            );
         }
 
         // -------------------------------------------------
-        // Neuen Käufer erstellen
+        // Käufer anlegen
         // -------------------------------------------------
 
-        $kaeufer = new Kaeufer($kaeuferPerson, $kaeuferData);
+        $kaeufer = new Kaeufer(
+            $kaeuferPerson,
+            $kaeuferData
+        );
 
-        $kaeufer->id = insertKaeufer($conn, $kaeufer);
+        $kaeufer->id = insertKaeufer(
+            $conn,
+            $kaeufer
+        );
     }
 
     // =================================================
-    // TICKETS VORBEREITEN
+    // TICKETBESITZER PRÜFEN
     // =================================================
     //
-    // Bei mehreren Datensätzen:
+    // data[0] ist IMMER der Käufer selbst.
     //
-    // data[0] = Käufer
-    // data[1] = Ticketbesitzer 1
-    // data[2] = Ticketbesitzer 2
-    // ...
+    // Deshalb muss der Käufer als erstes Ticket
+    // berücksichtigt werden.
     //
-    // Noch KEINE Tickets einfügen.
-    // Erst alle prüfen.
+    // =================================================
+
+    $ticketChecks = [];
+
+    // -------------------------------------------------
+    // KÄUFER = EIGENES TICKET
+    // -------------------------------------------------
+
+    $buyerAlreadyHasOwnTicket = ticketExistsForKaeufer(
+        $conn,
+        $kaeufer->id,
+        $kaeuferPerson->id
+    );
+
+    /*
+     * Wenn der Käufer bereits ein eigenes Ticket besitzt,
+     * wird KEIN zweites Ticket für dieselbe Person angelegt.
+     */
+    if (!$buyerAlreadyHasOwnTicket) {
+
+        $ticketChecks[] = [
+            "person" => $kaeuferPerson,
+            "existing" => true,
+            "isBuyer" => true
+        ];
+    }
+
+    // =================================================
+    // WEITERE TICKETBESITZER
     // =================================================
 
     $ticketDataList = array_slice($data, 1);
 
-    if (count($ticketDataList) < 1) {
-        throw new BookingException("Es wurde kein Ticket angegeben.",
-        "noTicket");
-    }
-
-    $ticketChecks = [];
-
-    // =================================================
-    // ALLE TICKETS PRÜFEN
-    // =================================================
-
     foreach ($ticketDataList as $ticketData) {
+
         if (!is_array($ticketData)) {
-            throw new BookingException("Ungültige Ticketdaten.",
-            "invalidTicketData");
+            throw new BookingException(
+                "Ungültige Ticketdaten.",
+                "invalidTicketData"
+            );
         }
 
         $person = new Person($ticketData);
 
         // -------------------------------------------------
-        // Personen-ID suchen
+        // Prüfen, ob Person bereits existiert
         // -------------------------------------------------
 
         $existingPersonId = personExistsByData(
@@ -748,23 +777,23 @@ try {
             $person->nachname
         );
 
-        // -------------------------------------------------
-        // PERSON EXISTIERT BEREITS
-        // -------------------------------------------------
-
         if ($existingPersonId !== null) {
+
             $person->id = $existingPersonId;
 
             // -------------------------------------------------
             // Person besitzt bereits irgendein Ticket?
             // -------------------------------------------------
 
-            if (ticketAlreadyExistsAnywhere($conn, $person->id)) {
+            if (ticketAlreadyExistsAnywhere(
+                $conn,
+                $person->id
+            )) {
                 throw new BookingException(
                     "{$person->vorname} {$person->nachname} besitzt bereits ein Ticket und kann nicht erneut hinzugefügt werden.",
                     "duplicate",
-                    $person->vorname, 
-                    $person->nachname, 
+                    $person->vorname,
+                    $person->nachname,
                     $person->email
                 );
             }
@@ -772,62 +801,164 @@ try {
             $ticketChecks[] = [
                 "person" => $person,
                 "existing" => true,
+                "isBuyer" => false
             ];
-        }
 
-        // -------------------------------------------------
-        // PERSON EXISTIERT NOCH NICHT
-        // -------------------------------------------------
-        else {
+        } else {
+
             $ticketChecks[] = [
                 "person" => $person,
                 "existing" => false,
+                "isBuyer" => false
             ];
         }
     }
 
     // =================================================
-    // ALLE TICKETS SIND GÜLTIG
+    // WICHTIGE KONTROLLE
+    // =================================================
     //
-    // JETZT ERST WIRD GESCHRIEBEN
+    // Die Anzahl der tatsächlich neuen Tickets muss
+    // der erwarteten Anzahl entsprechen.
+    //
+    // Bei einem neuen Käufer:
+    //
+    // Käufer + weitere Personen
+    //
+    // Bei einem bestehenden Käufer:
+    //
+    // Bereits vorhandenes eigenes Ticket wird nicht erneut
+    // angelegt.
+    //
     // =================================================
 
-    $newTickets = 0;
+    $newTickets = count($ticketChecks);
+
+    /*
+     * Bei einem neuen Käufer muss exakt die gesamte
+     * Buchungsanzahl angelegt werden.
+     */
+    if ($existingKaeuferId === null) {
+
+        if ($newTickets !== $actualTickets) {
+            throw new BookingException(
+                "Die Anzahl der zu erstellenden Tickets stimmt nicht mit der Buchung überein.",
+                "ticketCountMismatch"
+            );
+        }
+    }
+
+    // =================================================
+    // TICKETS SCHREIBEN
+    // =================================================
+
     $newCharges = 0.0;
 
+    $results = [];
+
     foreach ($ticketChecks as $ticketCheck) {
+
         /** @var Person $person */
         $person = $ticketCheck["person"];
 
         // -------------------------------------------------
-        // Neue Person jetzt anlegen
+        // Neue Person anlegen
         // -------------------------------------------------
 
         if (!$ticketCheck["existing"]) {
-            $person->id = insertPerson($conn, $person);
+
+            $person->id = insertPerson(
+                $conn,
+                $person
+            );
         }
 
         // -------------------------------------------------
-        // Ticket anlegen
+        // Ticketbesitzer anlegen
         // -------------------------------------------------
 
         insertTicketBesitzer(
             $conn,
-            new TicketBesitzer($kaeufer->id, $person->id)
+            new TicketBesitzer(
+                $kaeufer->id,
+                $person->id
+            )
         );
 
-        $newTickets++;
+        // -------------------------------------------------
+        // Preis addieren
+        // -------------------------------------------------
+
         $newCharges += $person->sum;
+
+        // -------------------------------------------------
+        // Ergebnis
+        // -------------------------------------------------
+
+        $results[] = [
+            "status" => "success",
+            "message" =>
+                "{$person->vorname} {$person->nachname} wurde als Ticketbesitzer hinzugefügt.",
+            "vorname" => $person->vorname,
+            "nachname" => $person->nachname
+        ];
     }
 
     // =================================================
-    // BESTEHENDEN / NEUEN KÄUFER AKTUALISIEREN
+    // KÄUFER AKTUALISIEREN
+    // =================================================
+    //
+    // Bei einem neuen Käufer wurde sein eigenes Ticket
+    // bereits durch insertKaeufer() berücksichtigt.
+    //
+    // Deshalb werden hier nur zusätzliche Tickets
+    // hinzugefügt.
+    //
     // =================================================
 
-    updateKaeuferTotals($conn, $kaeufer->id, $newCharges, $newTickets);
+    if ($existingKaeuferId !== null) {
+
+        /*
+         * Bei einem bestehenden Käufer werden nur die
+         * tatsächlich neu angelegten Tickets addiert.
+         */
+        updateKaeuferTotals(
+            $conn,
+            $kaeufer->id,
+            $newCharges,
+            $newTickets
+        );
+
+    } else {
+
+        /*
+         * Beim neuen Käufer wurde bereits:
+         *
+         * tickets = 1
+         * charges = Käuferpreis
+         *
+         * gespeichert.
+         *
+         * Jetzt kommen die weiteren Tickets dazu.
+         */
+
+        $additionalTickets = $newTickets - 1;
+
+        $additionalCharges = $newCharges - $kaeuferPerson->sum;
+
+        if ($additionalTickets > 0) {
+
+            updateKaeuferTotals(
+                $conn,
+                $kaeufer->id,
+                $additionalCharges,
+                $additionalTickets
+            );
+        }
+    }
 
     // =================================================
-    // ALLES ERFOLGREICH
+    // TRANSAKTION ABSCHLIESSEN
     // =================================================
 
     $conn->commit();
@@ -836,20 +967,6 @@ try {
     // ERFOLGSANTWORT
     // =================================================
 
-    $results = [];
-
-    foreach ($ticketChecks as $ticketCheck) {
-        /** @var Person $person */
-        $person = $ticketCheck["person"];
-
-        $results[] = [
-            "status" => "success",
-            "message" => "{$person->vorname} {$person->nachname} wurde als Ticketbesitzer hinzugefügt.",
-            "vorname" => $person->vorname,
-            "nachname" => $person->nachname,
-        ];
-    }
-
     echo json_encode([
         "status" => "finished",
 
@@ -857,21 +974,21 @@ try {
             "id" => $kaeufer->id,
             "vorname" => $kaeuferPerson->vorname,
             "nachname" => $kaeuferPerson->nachname,
-            "email" => $kaeuferPerson->email,
+            "email" => $kaeuferPerson->email
         ],
 
         "newTickets" => $newTickets,
         "newCharges" => $newCharges,
 
-        "results" => $results,
+        "results" => $results
     ]);
 
     exit();
-}catch (BookingException $e) {
+
+} catch (BookingException $e) {
+
     // =================================================
     // BUCHUNG ABGELEHNT
-    //
-    // ALLES ZURÜCKROLLEN
     // =================================================
 
     $conn->rollback();
@@ -891,16 +1008,16 @@ try {
                 "firstName" => $e->firstName,
                 "lastName" => $e->lastName,
                 "email" => $e->email
-            ],
-        ],
+            ]
+        ]
     ]);
 
     exit();
+
 } catch (Throwable $e) {
+
     // =================================================
     // TECHNISCHER FEHLER
-    //
-    // ALLES ZURÜCKROLLEN
     // =================================================
 
     $conn->rollback();
@@ -909,7 +1026,7 @@ try {
 
     echo json_encode([
         "status" => "error",
-        "message" => $e->getMessage(),
+        "message" => $e->getMessage()
     ]);
 
     exit();
